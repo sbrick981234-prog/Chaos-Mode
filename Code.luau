@@ -101,6 +101,10 @@ function Chaos(Character)
 		while true do
 			spawn(function()
 				while ChaosTimer > 0 do
+					if not Character then
+						break
+					end
+
 					ChaosTimer = ChaosTimer - 1
 
 					GUITimer.Text = ChaosTimer

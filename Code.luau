@@ -30,7 +30,7 @@ local LoadedEvent = nil
 function GiveGUI(Player)
 	local ScreenGui = Instance.new("ScreenGui")
 	ScreenGui.Name = "ChaosGui"
-	ScreenGui.ResetOnSpawn = false
+	ScreenGui.ResetOnSpawn = true
 	ScreenGui.IgnoreGuiInset = true
 	ScreenGui.DisplayOrder = 999999999999999
 	ScreenGui.Parent = Player.PlayerGui

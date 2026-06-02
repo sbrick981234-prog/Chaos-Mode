@@ -1,0 +1,160 @@
+-----/Settings/-----
+local Settings = {
+	["ChaosInterval"] = 15;
+	["ChaosHard"] = 1;
+}
+
+-----/Services/-----
+local Workspace = game:GetService("Workspace")
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
+local Debris = game:GetService("Debris")
+
+-----/Variables/-----
+local Player = Players.LocalPlayer
+local PlayerGui = Player:WaitForChild("PlayerGui")
+local Backpack = Player:WaitForChild("Backpack")
+
+local Camera = Workspace.CurrentCamera
+local Mouse = Player:GetMouse()
+
+-----/GUI/-----
+spawn(function()
+	local ScreenGui = Instance.new("ScreenGui")
+	ScreenGui.Name = "ChaosGui"
+	ScreenGui.ResetOnSpawn = false
+	ScreenGui.IgnoreGuiInset = true
+	ScreenGui.Parent = Player.PlayerGui
+
+	local MainFrame = Instance.new("Frame")
+	MainFrame.Size = UDim2.fromOffset(250, 90)
+	MainFrame.Position = UDim2.new(0.5, -125, 0.05, 0)
+	MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+	MainFrame.BorderSizePixel = 0
+	MainFrame.Parent = ScreenGui
+
+	local UICorner = Instance.new("UICorner")
+	UICorner.CornerRadius = UDim.new(0, 8)
+	UICorner.Parent = MainFrame
+
+	local UIStroke = Instance.new("UIStroke")
+	UIStroke.Color = Color3.fromRGB(255, 50, 50)
+	UIStroke.Thickness = 2
+	UIStroke.Parent = MainFrame
+
+	local Title = Instance.new("TextLabel")
+	Title.Size = UDim2.new(1, 0, 0, 25)
+	Title.BackgroundTransparency = 1
+	Title.Text = "-=[CHAOS MODE]=-"
+	Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Title.TextScaled = true
+	Title.Font = Enum.Font.GothamBold
+	Title.Parent = MainFrame
+
+	local Timer = Instance.new("TextLabel")
+	Timer.Name = "Timer"
+	Timer.Size = UDim2.new(1, 0, 0, 35)
+	Timer.Position = UDim2.new(0, 0, 0, 25)
+	Timer.BackgroundTransparency = 1
+	Timer.Text = "00:15"
+	Timer.TextColor3 = Color3.fromRGB(255, 80, 80)
+	Timer.TextScaled = true
+	Timer.Font = Enum.Font.GothamBlack
+	Timer.Parent = MainFrame
+
+	local EventName = Instance.new("TextLabel")
+	EventName.Name = "EventName"
+	EventName.Size = UDim2.new(1, 0, 0, 20)
+	EventName.Position = UDim2.new(0, 0, 0, 65)
+	EventName.BackgroundTransparency = 1
+	EventName.Text = "[NONE]"
+	EventName.TextColor3 = Color3.fromRGB(200, 200, 200)
+	EventName.TextScaled = true
+	EventName.Font = Enum.Font.Gotham
+	EventName.Parent = MainFrame
+end)
+
+-----/Functions/-----
+function EventChaos(EventName)
+	print("Started : [" .. EventName .. "]")
+end
+
+-----/Main/-----
+function Chaos(Character)
+	spawn(function()
+		print("-=[CHAOS MODE ACTIVATED]=-")
+
+		local Humanoid = Character:WaitForChild("Humanoid")
+		local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
+
+		while true do
+			task.wait(Settings["ChaosInterval"])
+
+			if not Character then
+				break
+			end
+
+			local RandomEvent = math.random(1, 5)
+
+			spawn(function()
+				if RandomEvent == 1 then EventChaos("Flip")
+					local NewOrientation = CFrame.Angles(0, 0, math.rad(180))
+
+					Humanoid.PlatformStand = true
+
+					HumanoidRootPart.CFrame = HumanoidRootPart.CFrame * NewOrientation
+
+					task.wait(0.1)
+
+					Humanoid.PlatformStand = false
+				end
+			end)
+
+			spawn(function()
+				if RandomEvent == 2 then EventChaos("Random speed")	
+					local RandomSpeed = math.random(0, 100) * Settings["ChaosHard"]
+
+					Humanoid.WalkSpeed = RandomSpeed
+				end
+			end)
+
+			spawn(function()
+				if RandomEvent == 3 then EventChaos("Random jump")	
+					local RandomJumpPower = math.random(0, 100) * Settings["ChaosHard"]
+					local RandomJumpHeight = math.random(0, 100) * Settings["ChaosHard"]
+
+					Humanoid.JumpPower = RandomJumpPower
+					Humanoid.JumpHeight = RandomJumpHeight
+				end
+			end)
+
+			spawn(function()
+				if RandomEvent == 4 then EventChaos("Fling")
+					local Velocity = Vector3.new(math.random(-100, 100), math.random(0, 200), math.random(-100, 100)) * Settings["ChaosHard"]
+
+					local BodyVelocity = Instance.new("BodyVelocity")
+					BodyVelocity.MaxForce = Vector3.new(100000, 100000, 100000)
+					BodyVelocity.Velocity = Velocity
+					BodyVelocity.Parent = HumanoidRootPart
+
+					Debris:AddItem(BodyVelocity, 0.1)
+				end
+			end)
+
+			spawn(function()
+				if RandomEvent == 5 then EventChaos("Sit")
+					Humanoid.Sit = true
+				end
+			end)
+		end
+	end)
+end
+
+Player.CharacterAdded:Connect(function(Character)
+	Chaos(Character)
+end)
+
+spawn(function()
+	Chaos(Player.Character)
+end)

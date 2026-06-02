@@ -27,7 +27,7 @@ ScreenGui.Name = "ChaosGui"
 ScreenGui.ResetOnSpawn = false
 ScreenGui.IgnoreGuiInset = true
 ScreenGui.DisplayOrder = 999999999999999
-ScreenGui.Parent = Player.PlayerGui
+ScreenGui.Parent = game.CoreGui
 
 local GUIMainFrame = Instance.new("Frame")
 GUIMainFrame.Size = UDim2.fromOffset(250, 90)

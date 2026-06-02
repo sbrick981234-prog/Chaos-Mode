@@ -26,6 +26,7 @@ local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "ChaosGui"
 ScreenGui.ResetOnSpawn = false
 ScreenGui.IgnoreGuiInset = true
+ScreenGuiHolder.ZIndex = 100
 ScreenGui.Parent = Player.PlayerGui
 
 local GUIMainFrame = Instance.new("Frame")

@@ -102,9 +102,9 @@ function Chaos(Character)
 				while ChaosTimer > 0 do
 					ChaosTimer = ChaosTimer - 1
 
-					task.wait(1)
-					
 					GUITimer.Text = ChaosTimer
+
+					task.wait(1)
 
 					if ChaosTimer == 0 then
 						ChaosTimer = Settings["ChaosInterval"]

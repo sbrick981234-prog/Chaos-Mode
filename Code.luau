@@ -26,7 +26,7 @@ local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "ChaosGui"
 ScreenGui.ResetOnSpawn = false
 ScreenGui.IgnoreGuiInset = true
-ScreenGuiHolder.ZIndex = 100
+ScreenGui.DisplayOrder = 999999999999999
 ScreenGui.Parent = Player.PlayerGui
 
 local GUIMainFrame = Instance.new("Frame")
@@ -112,7 +112,7 @@ function Chaos(Character)
 					end
 				end
 			end)
-			
+
 			task.wait(Settings["ChaosInterval"])
 
 			if not Character then

@@ -152,7 +152,7 @@ function Chaos(Character)
 
 					spawn(function()
 						if RandomEvent == 2 then EventChaos("Random speed")	
-							local RandomSpeed = math.random(0, 100) * Settings["ChaosHard"]
+							local RandomSpeed = math.random(100, 250) * Settings["ChaosHard"]
 
 							Humanoid.WalkSpeed = RandomSpeed
 						end

@@ -8,6 +8,7 @@ local Settings = {
 local Workspace = game:GetService("Workspace")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
+local CoreGui = game:GetService("CoreGui")
 local TweenService = game:GetService("TweenService")
 local Debris = game:GetService("Debris")
 
@@ -19,7 +20,7 @@ local Backpack = Player:WaitForChild("Backpack")
 local Camera = Workspace.CurrentCamera
 local Mouse = Player:GetMouse()
 
-local ChaosTimer = 15
+local ChaosTimer = Settings["ChaosInterval"]
 
 -----/GUI/-----
 local LoadedScreenGui = nil
@@ -33,7 +34,7 @@ function GiveGUI(Player)
 	ScreenGui.ResetOnSpawn = false
 	ScreenGui.IgnoreGuiInset = true
 	ScreenGui.DisplayOrder = 999999999999999
-	ScreenGui.Parent = Player.PlayerGui
+	ScreenGui.Parent = CoreGui:FindFirstChild("RobloxGui") or Player.PlayerGui
 
 	LoadedScreenGui = ScreenGui
 
@@ -42,6 +43,7 @@ function GiveGUI(Player)
 	MainFrame.Position = UDim2.new(0.5, -125, 0.05, 0)
 	MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 	MainFrame.BorderSizePixel = 0
+	MainFrame.ZIndex = 999999999999999
 	MainFrame.Parent = ScreenGui
 
 	local UICorner = Instance.new("UICorner")

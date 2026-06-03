@@ -163,11 +163,11 @@ function Chaos(Character)
 						if RandomEvent == 3 then EventChaos("Drunk")	
 							RunService.RenderStepped:Connect(function()
 								local Character = Player.Character
-								
+
 								if not Character then return end
 
 								local Humanoid = Character:FindFirstChildOfClass("Humanoid")
-								
+
 								if not Humanoid then return end
 
 								local X = 0
@@ -212,13 +212,15 @@ function Chaos(Character)
 							Humanoid.Sit = true
 						end
 					end)
-					
+
 					spawn(function()
-						if RandomEvent == 6 then EventChaos("White-Black")
+						if RandomEvent == 6 then EventChaos("Psyho")
 							local ColorCorrection = Instance.new("ColorCorrectionEffect")
-							
+
 							ColorCorrection.Name = "ChaosBlackWhite"
 							ColorCorrection.Saturation = -1
+							ColorCorrection.Contrast = 100
+							ColorCorrection.Brightness = 1
 							ColorCorrection.Parent = Lighting
 						end
 					end)

@@ -30,12 +30,12 @@ local LoadedEvent = nil
 function GiveGUI(Player)
 	local ScreenGui = Instance.new("ScreenGui")
 	ScreenGui.Name = "ChaosGui"
-	ScreenGui.ResetOnSpawn = true
+	ScreenGui.ResetOnSpawn = false
 	ScreenGui.IgnoreGuiInset = true
 	ScreenGui.DisplayOrder = 999999999999999
 	ScreenGui.Parent = Player.PlayerGui
-	
-	LoadedLoadedGUI = ScreenGui
+
+	LoadedScreenGui = ScreenGui
 
 	local MainFrame = Instance.new("Frame")
 	MainFrame.Size = UDim2.fromOffset(250, 90)
@@ -85,7 +85,7 @@ function GiveGUI(Player)
 	EventName.TextScaled = true
 	EventName.Font = Enum.Font.Gotham
 	EventName.Parent = MainFrame
-	
+
 	LoadedEvent = EventName
 end
 
@@ -94,7 +94,7 @@ end
 function EventChaos(EventName)
 	spawn(function()
 		print("Started : [" .. EventName .. "]")
-
+		
 		LoadedEvent.Text = "[" .. EventName .. "]"
 
 		task.wait(3)
@@ -107,99 +107,91 @@ end
 function Chaos(Character)
 	spawn(function()
 		print("-=[CHAOS MODE ACTIVATED]=-")
-
-		local Humanoid = Character:WaitForChild("Humanoid")
-		local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
-
-		while true do
-			spawn(function()
-				while ChaosTimer > 0 do
-					if not Character then
-						break
-					end
-
+		
+		spawn(function()
+			while ChaosTimer > 0 do
+				if LoadedTimer then
 					ChaosTimer = ChaosTimer - 1
+				else
+					ChaosTimer = Settings["ChaosInterval"]
+					
+					break
+				end
 
+				task.wait(1)
+
+				if LoadedTimer then
 					LoadedTimer.Text = ChaosTimer
-
-					task.wait(1)
-
-					if ChaosTimer == 0 then
-						ChaosTimer = Settings["ChaosInterval"]
-					end
 				end
-			end)
 
-			task.wait(Settings["ChaosInterval"])
+				if ChaosTimer == 0 then
+					ChaosTimer = Settings["ChaosInterval"]
+					
+					local Character = Player.Character
+					
+					local Humanoid = Character:WaitForChild("Humanoid")
+					local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
+					
+					local RandomEvent = math.random(1, 5)
 
-			if not Character then
-				break
+					spawn(function()
+						if RandomEvent == 1 then EventChaos("Flip")
+							local NewOrientation = CFrame.Angles(0, 0, math.rad(180))
+
+							Humanoid.PlatformStand = true
+
+							HumanoidRootPart.CFrame = HumanoidRootPart.CFrame * NewOrientation
+
+							task.wait(0.1)
+
+							Humanoid.PlatformStand = false
+						end
+					end)
+
+					spawn(function()
+						if RandomEvent == 2 then EventChaos("Random speed")	
+							local RandomSpeed = math.random(0, 100) * Settings["ChaosHard"]
+
+							Humanoid.WalkSpeed = RandomSpeed
+						end
+					end)
+
+					spawn(function()
+						if RandomEvent == 3 then EventChaos("Random jump")	
+							local RandomJumpPower = math.random(0, 100) * Settings["ChaosHard"]
+							local RandomJumpHeight = math.random(0, 100) * Settings["ChaosHard"]
+
+							Humanoid.JumpPower = RandomJumpPower
+							Humanoid.JumpHeight = RandomJumpHeight
+						end
+					end)
+
+					spawn(function()
+						if RandomEvent == 4 then EventChaos("Fling")
+							local Velocity = Vector3.new(math.random(-100, 100), math.random(0, 200), math.random(-100, 100)) * Settings["ChaosHard"]
+
+							local BodyVelocity = Instance.new("BodyVelocity")
+							BodyVelocity.MaxForce = Vector3.new(100000, 100000, 100000)
+							BodyVelocity.Velocity = Velocity
+							BodyVelocity.Parent = HumanoidRootPart
+
+							Debris:AddItem(BodyVelocity, 0.1)
+						end
+					end)
+
+					spawn(function()
+						if RandomEvent == 5 then EventChaos("Sit")
+							Humanoid.Sit = true
+						end
+					end)
+				end
 			end
-
-			local RandomEvent = math.random(1, 5)
-
-			spawn(function()
-				if RandomEvent == 1 then EventChaos("Flip")
-					local NewOrientation = CFrame.Angles(0, 0, math.rad(180))
-
-					Humanoid.PlatformStand = true
-
-					HumanoidRootPart.CFrame = HumanoidRootPart.CFrame * NewOrientation
-
-					task.wait(0.1)
-
-					Humanoid.PlatformStand = false
-				end
-			end)
-
-			spawn(function()
-				if RandomEvent == 2 then EventChaos("Random speed")	
-					local RandomSpeed = math.random(0, 100) * Settings["ChaosHard"]
-
-					Humanoid.WalkSpeed = RandomSpeed
-				end
-			end)
-
-			spawn(function()
-				if RandomEvent == 3 then EventChaos("Random jump")	
-					local RandomJumpPower = math.random(0, 100) * Settings["ChaosHard"]
-					local RandomJumpHeight = math.random(0, 100) * Settings["ChaosHard"]
-
-					Humanoid.JumpPower = RandomJumpPower
-					Humanoid.JumpHeight = RandomJumpHeight
-				end
-			end)
-
-			spawn(function()
-				if RandomEvent == 4 then EventChaos("Fling")
-					local Velocity = Vector3.new(math.random(-100, 100), math.random(0, 200), math.random(-100, 100)) * Settings["ChaosHard"]
-
-					local BodyVelocity = Instance.new("BodyVelocity")
-					BodyVelocity.MaxForce = Vector3.new(100000, 100000, 100000)
-					BodyVelocity.Velocity = Velocity
-					BodyVelocity.Parent = HumanoidRootPart
-
-					Debris:AddItem(BodyVelocity, 0.1)
-				end
-			end)
-
-			spawn(function()
-				if RandomEvent == 5 then EventChaos("Sit")
-					Humanoid.Sit = true
-				end
-			end)
-		end
+		end)
 	end)
 end
 
-Player.CharacterAdded:Connect(function(Character)
-	Chaos(Character)
-	
-	GiveGUI(Player)
-end)
-
 spawn(function()
 	Chaos(Player.Character)
-	
+
 	GiveGUI(Player)
 end)

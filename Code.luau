@@ -7,8 +7,9 @@ local Settings = {
 -----/Services/-----
 local Workspace = game:GetService("Workspace")
 local Players = game:GetService("Players")
+local Lighting = game:GetService("Lighting")
 local RunService = game:GetService("RunService")
-local CoreGui = game:GetService("CoreGui")
+local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local Debris = game:GetService("Debris")
 
@@ -34,7 +35,7 @@ function GiveGUI(Player)
 	ScreenGui.ResetOnSpawn = false
 	ScreenGui.IgnoreGuiInset = true
 	ScreenGui.DisplayOrder = 999999999999999
-	ScreenGui.Parent = CoreGui:FindFirstChild("RobloxGui") or Player.PlayerGui
+	ScreenGui.Parent = Player.PlayerGui
 
 	LoadedScreenGui = ScreenGui
 
@@ -96,7 +97,7 @@ end
 function EventChaos(EventName)
 	spawn(function()
 		print("Started : [" .. EventName .. "]")
-		
+
 		LoadedEvent.Text = "[" .. EventName .. "]"
 
 		task.wait(3)
@@ -109,14 +110,14 @@ end
 function Chaos(Character)
 	spawn(function()
 		print("-=[CHAOS MODE ACTIVATED]=-")
-		
+
 		spawn(function()
 			while ChaosTimer > 0 do
 				if LoadedTimer then
 					ChaosTimer = ChaosTimer - 1
 				else
 					ChaosTimer = Settings["ChaosInterval"]
-					
+
 					break
 				end
 
@@ -128,13 +129,13 @@ function Chaos(Character)
 
 				if ChaosTimer == 0 then
 					ChaosTimer = Settings["ChaosInterval"]
-					
+
 					local Character = Player.Character
-					
+
 					local Humanoid = Character:WaitForChild("Humanoid")
 					local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
-					
-					local RandomEvent = math.random(1, 5)
+
+					local RandomEvent = math.random(1, 6)
 
 					spawn(function()
 						if RandomEvent == 1 then EventChaos("Flip")
@@ -159,12 +160,37 @@ function Chaos(Character)
 					end)
 
 					spawn(function()
-						if RandomEvent == 3 then EventChaos("Random jump")	
-							local RandomJumpPower = math.random(0, 100) * Settings["ChaosHard"]
-							local RandomJumpHeight = math.random(0, 100) * Settings["ChaosHard"]
+						if RandomEvent == 3 then EventChaos("Drunk")	
+							RunService.RenderStepped:Connect(function()
+								local Character = Player.Character
+								
+								if not Character then return end
 
-							Humanoid.JumpPower = RandomJumpPower
-							Humanoid.JumpHeight = RandomJumpHeight
+								local Humanoid = Character:FindFirstChildOfClass("Humanoid")
+								
+								if not Humanoid then return end
+
+								local X = 0
+								local Z = 0
+
+								if UserInputService:IsKeyDown(Enum.KeyCode.W) then
+									Z += 1
+								end
+
+								if UserInputService:IsKeyDown(Enum.KeyCode.S) then
+									Z -= 1
+								end
+
+								if UserInputService:IsKeyDown(Enum.KeyCode.A) then
+									X += 1
+								end
+
+								if UserInputService:IsKeyDown(Enum.KeyCode.D) then
+									X -= 1
+								end
+
+								Humanoid:Move(Vector3.new(X, 0, Z), true)
+							end)
 						end
 					end)
 
@@ -184,6 +210,16 @@ function Chaos(Character)
 					spawn(function()
 						if RandomEvent == 5 then EventChaos("Sit")
 							Humanoid.Sit = true
+						end
+					end)
+					
+					spawn(function()
+						if RandomEvent == 6 then EventChaos("White-Black")
+							local ColorCorrection = Instance.new("ColorCorrectionEffect")
+							
+							ColorCorrection.Name = "ChaosBlackWhite"
+							ColorCorrection.Saturation = -1
+							ColorCorrection.Parent = Lighting
 						end
 					end)
 				end
